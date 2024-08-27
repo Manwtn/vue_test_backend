@@ -36,6 +36,25 @@ app.get('/users', async (req, res) => {
     })
 })
 
+app.get('/users/:id', async (req, res) => {
+    const { id } = req.params
+    let sql = "SELECT * FROM users WHERE id = ?"
+    conn.execute(sql,
+        [id],
+    (err, result) => {
+        if(err) {
+            res.status(500).json({
+                message : err.message
+            })
+            return
+        }
+        res.status(200).json({
+            message : "เรียกข้อมูลสำเร็จ",
+            data : result
+        })
+    })
+})
+
 app.post('/users', async (req, res) => {
     const { name, address, score} = req.body
     let sql = "INSERT INTO users (name, address, score) VALUES (?, ?, ?)"
